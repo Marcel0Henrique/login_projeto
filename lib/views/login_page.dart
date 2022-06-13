@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:login_projeto/components/login/login_button.dart';
 import 'package:login_projeto/controllers/login_controller.dart';
+import 'package:login_projeto/widgets/custom_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -24,56 +26,26 @@ class _LoginPageState extends State<LoginPage> {
                 Icons.people,
                 size: 98,
               ),
-              TextField(
+              CustomTextField(
                 controller: _controller.user_controller,
-                decoration: const InputDecoration(
-                  label: Text("Login"),
-                  hintText: "Login",
-                ),
+                label: "Usuario",
               ),
-              TextField(
+              CustomTextField(
                 controller: _controller.passwd_controller,
+                label: "Senha",
                 obscureText: true,
-                decoration: const InputDecoration(
-                  label: Text("Senha"),
-                  hintText: "Senha",
-                ),
               ),
               SizedBox(
                 height: 25,
               ),
-              ValueListenableBuilder<bool>(
-                valueListenable: _controller.isLoading,
-                builder: (_, isLoader, __) => isLoader
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () {
-                          _controller.auth().then(
-                            (result) {
-                              if (result) {
-                                Navigator.pushReplacementNamed(
-                                    context, "/home");
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(erro_snackBar());
-                              }
-                            },
-                          );
-                        },
-                        child: const Text("Entrar"),
-                      ),
-              )
+              LoginButton(
+                login_controller: _controller,
+                title: "Entrar",
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-SnackBar erro_snackBar() {
-  return SnackBar(
-    content: Text("Erro"),
-    duration: Duration(seconds: 3),
-  );
 }
