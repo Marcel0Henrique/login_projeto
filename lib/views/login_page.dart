@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_projeto/controllers/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -8,6 +9,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  LoginController _controller = LoginController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +24,17 @@ class _LoginPageState extends State<LoginPage> {
                 Icons.people,
                 size: 98,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _controller.user_controller,
+                decoration: const InputDecoration(
                   label: Text("Login"),
                   hintText: "Login",
                 ),
               ),
-              const TextField(
+              TextField(
+                controller: _controller.passwd_controller,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   label: Text("Senha"),
                   hintText: "Senha",
                 ),
@@ -37,7 +42,19 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 25,
               ),
-              ElevatedButton(onPressed: () {}, child: const Text("Entrar"))
+              ElevatedButton(
+                  onPressed: () {
+                    _controller.auth().then(
+                      (result) {
+                        if (result) {
+                          print("Sucesso");
+                        } else {
+                          print("Falha");
+                        }
+                      },
+                    );
+                  },
+                  child: const Text("Entrar"))
             ],
           ),
         ),
