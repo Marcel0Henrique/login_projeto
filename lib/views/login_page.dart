@@ -42,23 +42,38 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 25,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    _controller.auth().then(
-                      (result) {
-                        if (result) {
-                          print("Sucesso");
-                        } else {
-                          print("Falha");
-                        }
-                      },
-                    );
-                  },
-                  child: const Text("Entrar"))
+              ValueListenableBuilder<bool>(
+                valueListenable: _controller.isLoading,
+                builder: (_, isLoader, __) => isLoader
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () {
+                          _controller.auth().then(
+                            (result) {
+                              if (result) {
+                                Navigator.pushReplacementNamed(
+                                    context, "/home");
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(erro_snackBar());
+                              }
+                            },
+                          );
+                        },
+                        child: const Text("Entrar"),
+                      ),
+              )
             ],
           ),
         ),
       ),
     );
   }
+}
+
+SnackBar erro_snackBar() {
+  return SnackBar(
+    content: Text("Erro"),
+    duration: Duration(seconds: 3),
+  );
 }
